@@ -6,6 +6,8 @@ import { AuthGuard } from './middlewares/auth.middleware';
 import { JwtService } from './jwt/jwt.service';
 import { UsersController } from './users/users.controller';
 import { UsersService } from './users/users.service';
+import { AuthModule } from './auth/auth.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -17,6 +19,7 @@ import { UsersService } from './users/users.service';
     synchronize: true,
     entities: [__dirname + '/**/*.entity{.ts,.js}']}),
     TypeOrmModule.forFeature(entities),
+    AuthModule,
   ],
   controllers: [AppController,UsersController],
   providers: [AuthGuard, JwtService, UsersService],

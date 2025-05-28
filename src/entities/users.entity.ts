@@ -1,4 +1,5 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Role } from './roles.entity';
 
 @Entity('Users')
 export class UserEntity extends BaseEntity{
@@ -6,11 +7,15 @@ export class UserEntity extends BaseEntity{
   id: number;
 
   @Column()
+  name: string
+
+  @Column()
   email: string;
+  
   @Column()
   password: string;
 
-  get permissionCodes() {
-    return ['create-users', 'list-products'];
-  }
+  @ManyToOne(() => Role, role => role.id)
+  @JoinColumn({ name: 'id' })
+  role: number;
 }

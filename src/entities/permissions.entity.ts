@@ -1,14 +1,15 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { RolesxPermissions } from './rolesxpermission.entity';
 
-@Entity('Permissions')
-export class UserEntity extends BaseEntity{
+@Entity('permissions')
+export class Permission {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  name: string;
+  @Column({ unique: true })
+  code: string; //Ej: "CREATE_USER", "DELETE_USER"
 
-  get permissionCodes() {
-    return ['create-users', 'list-products'];
-  }
+  // Relación uno a muchos hacia la entidad intermedia
+  @OneToMany(() => RolesxPermissions, rolesxPermissions => rolesxPermissions.permission)
+  rolesxPermissions: RolesxPermissions[];
 }
