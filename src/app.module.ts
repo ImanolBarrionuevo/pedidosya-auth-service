@@ -7,6 +7,7 @@ import { JwtService } from './jwt/jwt.service';
 import { UsersController } from './users/users.controller';
 import { UsersService } from './users/users.service';
 import { AuthModule } from './auth/auth.module';
+import { RolesPermissionsModule } from './roles-permissions/roles-permissions.module';
 import { AuthModule } from './auth/auth.module';
 
 @Module({
@@ -20,6 +21,7 @@ import { AuthModule } from './auth/auth.module';
     entities: [__dirname + '/**/*.entity{.ts,.js}']}),
     TypeOrmModule.forFeature(entities),
     AuthModule,
+    RolesPermissionsModule,
   ],
   controllers: [AppController,UsersController],
   providers: [AuthGuard, JwtService, UsersService],

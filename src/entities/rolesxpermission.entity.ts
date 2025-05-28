@@ -8,11 +8,11 @@ export class RolesxPermissions {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Role, role => role.rolesxPermissions)
-  @JoinColumn({ name: 'roleId' })
+  @ManyToOne(() => Role, role => role.id)
+  @JoinColumn({ name: 'id' })
   role: Role;
 
-  @ManyToOne(() => Permission, permission => permission.rolesxPermissions)
-  @JoinColumn({ name: 'permissionId' })
+  @ManyToOne(() => Permission, permission => permission.id)
+  @JoinColumn({ name: 'id' })
   permission: Permission;
 }
