@@ -1,4 +1,4 @@
-import {
+/*import {
   CanActivate,
   ExecutionContext,
   Injectable,
@@ -38,3 +38,4 @@ export class AuthGuard implements CanActivate {
     }
   }
 }
+*/

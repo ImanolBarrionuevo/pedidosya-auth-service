@@ -8,7 +8,7 @@ import { UsersController } from './users/users.controller';
 import { UsersService } from './users/users.service';
 import { AuthModule } from './auth/auth.module';
 import { RolesPermissionsModule } from './roles-permissions/roles-permissions.module';
-import { AuthModule } from './auth/auth.module';
+
 
 @Module({
   imports: [
