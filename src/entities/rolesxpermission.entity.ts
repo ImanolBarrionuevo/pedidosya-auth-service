@@ -1,4 +1,3 @@
-// src/roles/entities/rolesxpermissions.entity.ts
 import { Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm';
 import { Role } from './roles.entity';
 import { Permission } from './permissions.entity';
@@ -9,10 +8,10 @@ export class RolesxPermissions {
   id: number;
 
   @ManyToOne(() => Role, role => role.id)
-  @JoinColumn({ name: 'id' })
+  @JoinColumn({ name: 'roleId' })
   role: Role;
 
   @ManyToOne(() => Permission, permission => permission.id)
-  @JoinColumn({ name: 'id' })
+  @JoinColumn({ name: 'permissionId' })
   permission: Permission;
 }
