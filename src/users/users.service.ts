@@ -7,4 +7,6 @@ import { JwtService } from 'src/jwt/jwt.service';
 export class UsersService {
   repository = UserEntity;
   constructor(private jwtService: JwtService) {}
+
+  //Función para asignar roles
 }

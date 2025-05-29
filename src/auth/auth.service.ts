@@ -1,11 +1,11 @@
-import {Injectable} from '@nestjs/common';
+import {HttpException, Injectable} from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
 
 import { JwtService } from '../jwt/jwt.service';
 
 import { LoginAuthDto } from './dto/login-auth.dto';
 import { RegisterAuthDto } from './dto/register-auth.dto';
-import { hash } from 'bcrypt';
+import { hash, compare } from 'bcrypt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserEntity } from 'src/entities/users.entity';
@@ -19,14 +19,29 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async register(userObject:RegisterAuthDto) {
-    const {password} = userObject//Esta en texto plano (12345)
+  async register(userObjectRegister:RegisterAuthDto) {
+    const {password} = userObjectRegister//Esta en texto plano (12345)
     const plainToHash = await hash(password, 10) //Numero de aleatoriedad de la constraseña ($y/ysd83)
-    userObject = {...userObject, password:plainToHash};
-    return this.userRepository.create(userObject)
+    userObjectRegister = {...userObjectRegister, password:plainToHash};
+    const newUser = this.userRepository.create(userObjectRegister)
+    return this.userRepository.save(newUser)
   }
 
-  async login({ email, password }: LoginAuthDto) {
+  async login(userObjectLogin: LoginAuthDto) {
+    const {email, password} = userObjectLogin;
+    const findUser = await this.userRepository.findOne({where: {email}})
+    if(!findUser) throw new HttpException('USER_NOT_FOUND', 404)
+    
+    
+    const checkPassword = await compare(password, findUser.password) //Porque me lo toma como que puede ser null
+
+    if(!checkPassword) throw new HttpException('PASSWORD_INCORRECT', 403)
+
+    const data = findUser;
+
+    return data
+
   }
 
+  
 }
