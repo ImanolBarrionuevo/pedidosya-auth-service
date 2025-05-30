@@ -8,7 +8,7 @@ import { RegisterAuthDto } from './dto/register-auth.dto';
 import { hash, compare } from 'bcrypt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { UserEntity } from 'src/entities/users.entity';
+import { UserEntity } from 'src/common/entities/users.entity';
 
 @Injectable()
 export class AuthService {

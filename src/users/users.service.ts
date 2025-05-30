@@ -1,12 +1,10 @@
 import {Injectable} from '@nestjs/common';
-import { UserEntity } from '../entities/users.entity';
-import { JwtService } from 'src/jwt/jwt.service';
+import { UserEntity } from '../common/entities/users.entity';
 
 
 @Injectable()
 export class UsersService {
   repository = UserEntity;
-  constructor(private jwtService: JwtService) {}
+  constructor() {}
 
-  //Función para asignar roles
 }

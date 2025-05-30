@@ -1,9 +1,8 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { entities } from './entities';
+import { entities } from './common/entities';
 //import { AuthGuard } from './middlewares/auth.middleware';
-import { JwtService } from './jwt/jwt.service';
 import { UsersController } from './users/users.controller';
 import { UsersService } from './users/users.service';
 import { AuthModule } from './auth/auth.module';
@@ -30,6 +29,6 @@ import { PermissionsModule } from './permissions/permissions.module';
     PermissionsModule
   ],
   controllers: [AppController,UsersController],
-  providers: [ JwtService, UsersService], //FALTA AuthGuard
+  providers: [UsersService], //FALTA AuthGuard
 })
 export class AppModule {}
