@@ -1,6 +1,6 @@
 \c authuser;
 
-INSERT INTO roles(name) VALUES 
+INSERT INTO "Roles"(name) VALUES 
     ('Invitado'),
     ('Usuario'),
     ('Administrador');

@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body} from '@nestjs/common';
+import { Controller, Post, Body, HttpCode} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { RegisterAuthDto } from './dto/register-auth.dto';
 import { LoginAuthDto } from './dto/login-auth.dto';
@@ -13,6 +13,7 @@ export class AuthController {
     return this.authService.register(registerAuthDto);
   }
 
+  @HttpCode(200) //Cambiamos el code 201 Created por defecto del POST por 200 OK ya que en sí no creamos nada
   @Post('login')
   loginUser(@Body() loginAuthDto: LoginAuthDto) {
     return this.authService.login(loginAuthDto);

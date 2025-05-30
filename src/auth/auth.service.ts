@@ -1,7 +1,7 @@
 import {HttpException, Injectable} from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
 
-import { JwtService } from '../jwt/jwt.service';
+import { JwtService } from '@nestjs/jwt';
 
 import { LoginAuthDto } from './dto/login-auth.dto';
 import { RegisterAuthDto } from './dto/register-auth.dto';
@@ -37,7 +37,13 @@ export class AuthService {
 
     if(!checkPassword) throw new HttpException('PASSWORD_INCORRECT', 403)
 
-    const data = findUser;
+    const payload = {id: findUser.id, name: findUser.name}
+    const token = await this.jwtService.signAsync(payload)
+
+    const data = {
+      'user': findUser,
+      token
+    };
 
     return data
 
