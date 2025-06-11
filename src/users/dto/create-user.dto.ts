@@ -1,21 +1,23 @@
-import {IsEmail, IsNotEmpty, IsNumber, IsString} from "class-validator";
+import { IsEmail, IsNotEmpty, IsString } from "class-validator";
+import { Transform } from 'class-transformer';
 
-export class CreateUserDto{
-    
-    @IsString()
-    @IsNotEmpty()
-    name: string
+export class CreateUserDto {
 
-    @IsEmail()
-    @IsNotEmpty()
+    @IsNotEmpty({ message: 'El nombre es obligatorio.' })
+    @IsString({ message: 'El nombre debe ser un texto.' })
+    name: string;
+
+    @IsNotEmpty({ message: 'El email es obligatorio.' })
+    @IsEmail({}, { message: 'El email debe ser válido.' })
     email: string;
 
-    @IsString()
-    @IsNotEmpty()
+    @IsNotEmpty({ message: 'La contraseña es obligatoria.' })
+    @IsString({ message: 'La contraseña debe ser un texto.' })
     password: string;
 
+    @IsNotEmpty({ message: 'El ID del rol es obligatorio.' })
+    //@IsNumber({}, { message: 'El ID de la ciudad debe ser numérico.' })
+    @Transform(({ value }) => ({ id: value }))
+    city: { id: number };
 
-    @IsNotEmpty()
-    @IsNumber()
-    role: number; //Verificar si no hay que usar transform
 }

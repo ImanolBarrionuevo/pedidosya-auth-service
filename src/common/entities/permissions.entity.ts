@@ -1,7 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column} from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
 @Entity('Permissions')
-export class Permission {
+export class PermissionEntity {
   @PrimaryGeneratedColumn()
   id: number;
 

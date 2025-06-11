@@ -1,17 +1,17 @@
 import { Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm';
-import { Role } from './roles.entity';
-import { Permission } from './permissions.entity';
+import { RoleEntity } from './roles.entity';
+import { PermissionEntity } from './permissions.entity';
 
 @Entity('RolesxPermissions')
-export class RolesxPermissions {
+export class RolesxPermissionsEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Role, role => role.id)
+  @ManyToOne(() => RoleEntity, role => role.id)
   @JoinColumn({ name: 'roleId' })
-  role: Role;
+  role: RoleEntity;
 
-  @ManyToOne(() => Permission, permission => permission.id)
+  @ManyToOne(() => PermissionEntity, permission => permission.id)
   @JoinColumn({ name: 'permissionId' })
-  permission: Permission;
+  permission: PermissionEntity;
 }
