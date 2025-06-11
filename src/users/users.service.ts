@@ -17,7 +17,7 @@ export class UsersService {
 
   async findAllUser() {
     const allUsers = await this.usersRepository.find({
-      relations: ['roles-permissions', 'roles-permissions.roles'],
+      relations: ['roles', 'roles.permissions'],
     });
     return allUsers
   }
@@ -27,11 +27,14 @@ export class UsersService {
   }
 
   async findOneByEmail(email) {
-    const user = await this.usersRepository.findOne(email)
+    const user = await this.usersRepository.findOne({
+      where: { email: email },
+      relations: ['roles-permissions', 'roles-permissions.roles'],
+    });
     if (!user) {
-      return false;
+      throw new NotFoundException("Usuario no encontrado");
     }
-    return true
+    return user
   }
 
   async findUser(id: number) {
