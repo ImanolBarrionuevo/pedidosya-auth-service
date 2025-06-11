@@ -8,13 +8,12 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { Request } from 'express'; //No se usa
-import { UserEntity } from '../entities/users.entity'; //No se usa
-import { RequestWithUser } from 'src/interfaces/request-user';
-import { JwtService } from 'src/jwt/jwt.service';
+import { RequestWithUser } from '../common/interface/request-user'
+import { JwtService } from '@nestjs/jwt';
 import { UsersService } from 'src/users/users.service';
 import { jwtConstants } from 'src/common/jwt/jwt.constants';
-import { PERMISSIONS_KEY } from './decorators/permissions.decorator';
-import { UserRole } from './decorators/permissions.enum';
+import { PERMISSIONS_KEY} from './decorators/permissions.decorator';
+
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -47,9 +46,9 @@ export class AuthGuard implements CanActivate {
       );
       // Si no se definieron permisos en la ruta, se permite el acceso
       if (requiredPermissions && requiredPermissions.length > 0) {
-        const userPermissions: string[] = user.permissions || []; //Cambiar el user.permission por la ruta para traer los permisos
-        const hasPermission = requiredPermissions.every(permission => //Booleano que verifica si tiene permisos o no
-          userPermissions.includes(permission)
+        const userPermissions: string[] = (user.role.permissions || []).map(permission => permission.code); //Traemos todos los permisos del usuario
+        const hasPermission = requiredPermissions.every(permission => 
+          userPermissions.includes(permission.toString()) //Convertimos de tipo Permissions (enum) a string
         );
         if (!hasPermission) {
           throw new UnauthorizedException('No tienes los permisos necesarios');
