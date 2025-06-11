@@ -1,8 +1,6 @@
-import {HttpException, Injectable} from '@nestjs/common';
+import {BadRequestException, HttpException, Injectable} from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
-
 import { JwtService } from '@nestjs/jwt';
-
 import { LoginAuthDto } from './dto/login-auth.dto';
 import { RegisterAuthDto } from './dto/register-auth.dto';
 import { hash, compare } from 'bcrypt';
@@ -20,10 +18,18 @@ export class AuthService {
   ) {}
 
   async register(userObjectRegister:RegisterAuthDto) {
-    const {password} = userObjectRegister//Esta en texto plano (12345)
+    const user = await this.usersService.findOneByEmail(userObjectRegister.email)
+    if (user) {
+      throw new BadRequestException("Email ya registrado");
+    }
+    const {password} = userObjectRegister //Esta en texto plano (12345)
     const plainToHash = await hash(password, 10) //Numero de aleatoriedad de la constraseña ($y/ysd83)
     userObjectRegister = {...userObjectRegister, password:plainToHash};
-    const newUser = this.userRepository.create(userObjectRegister)
+    const userWithRole = {
+      ...userObjectRegister, 
+      role: {id: userObjectRegister.role}
+    }
+    const newUser = this.userRepository.create(userWithRole)
     return this.userRepository.save(newUser)
   }
 

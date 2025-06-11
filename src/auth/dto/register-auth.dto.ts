@@ -8,5 +8,5 @@ export class RegisterAuthDto extends PartialType(LoginAuthDto){
 
     @IsNotEmpty()
     @IsNumber()
-    role: number=1
+    role: number = 1
 }

@@ -1,6 +1,6 @@
 //ACTUALIZAR LOGICA DEL CAN ACTIVATE 
 
-/*import {
+import {
   CanActivate,
   ExecutionContext,
   Injectable,
@@ -12,7 +12,9 @@ import { UserEntity } from '../entities/users.entity'; //No se usa
 import { RequestWithUser } from 'src/interfaces/request-user';
 import { JwtService } from 'src/jwt/jwt.service';
 import { UsersService } from 'src/users/users.service';
-import { Permissions } from './decorators/permissions.decorator';
+import { jwtConstants } from 'src/common/jwt/jwt.constants';
+import { PERMISSIONS_KEY } from './decorators/permissions.decorator';
+import { UserRole } from './decorators/permissions.enum';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -24,20 +26,44 @@ export class AuthGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     try {
       const request: RequestWithUser = context.switchToHttp().getRequest();
-      const token = request.headers.authorization.replace('Bearer ','');
-      if (token == null) {
+      const token = this.extractTokenFromHeader(request);
+      if (!token) {
         throw new UnauthorizedException('El token no existe');
       }
-      const payload = this.jwtService.getPayload(token);
-      const user = await this.usersService.findByEmail(payload.email);
+
+      const payload = await this.jwtService.verifyAsync(
+        token,
+        {
+          secret: jwtConstants.secret
+        }
+      );
+      //Buscamos al usuario por si se actualizan los permisos, no tener que esperar actualización del token
+      const user = await this.usersService.findOneByEmail(payload.email);
       request.user = user;
-      //AGREGAR LOGICA PARA USAR LOS PERMISOS QUE VIENEN EN EL DECORADOR
-      const permissions = this.reflector.get(Permissions, context.getHandler());
-      console.log(permissions)
+      //Lógica permisos
+      const requiredPermissions = this.reflector.get<Permissions[]>(
+        PERMISSIONS_KEY,
+        context.getHandler()
+      );
+      // Si no se definieron permisos en la ruta, se permite el acceso
+      if (requiredPermissions && requiredPermissions.length > 0) {
+        const userPermissions: string[] = user.permissions || []; //Cambiar el user.permission por la ruta para traer los permisos
+        const hasPermission = requiredPermissions.every(permission => //Booleano que verifica si tiene permisos o no
+          userPermissions.includes(permission)
+        );
+        if (!hasPermission) {
+          throw new UnauthorizedException('No tienes los permisos necesarios');
+        }
+      }
       return true;
     } catch (error) {
       throw new UnauthorizedException(error?.message);
     }
   }
+
+  private extractTokenFromHeader(request: Request): string | undefined {
+    const [type, token] = request.headers.authorization?.split(' ') ?? [];
+    return type === 'Bearer' ? token : undefined;
+  }
 }
-*/
+
