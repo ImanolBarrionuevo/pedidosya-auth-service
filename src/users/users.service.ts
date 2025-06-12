@@ -64,13 +64,17 @@ export class UsersService {
 
   async partialUpdateUser(id: number, updateUserDto: UpdateUserDto) {
 
+    console.log("entre1")
     const user = await this.usersRepository.findOne({ where: { id } });
     if (!user) {
+      console.log("entre2")
       throw new NotFoundException("Usuario no encontrado");
     }
 
     // Si el DTO tiene una propiedad relacional para el rol, actualízala de forma explícita.
     if (updateUserDto.role) {
+      console.log("entre3")
+      console.log(updateUserDto.role)
       // Suponiendo que updateUserDto.role es un número (el ID del rol)
       const roleEntity = await this.roleRepository.findOne({ where: { id: updateUserDto.role} });
       console.log(roleEntity)
