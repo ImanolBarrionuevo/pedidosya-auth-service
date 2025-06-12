@@ -18,9 +18,9 @@ import { PERMISSIONS_KEY } from './decorators/permissions.decorator';
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(
-    private jwtService: JwtService,
-    private usersService: UsersService,
-    private reflector: Reflector
+    private readonly jwtService: JwtService,
+    private readonly usersService: UsersService,
+    private readonly reflector: Reflector
   ) { }
   async canActivate(context: ExecutionContext): Promise<boolean> {
     try {
