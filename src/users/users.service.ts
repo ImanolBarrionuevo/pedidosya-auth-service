@@ -26,10 +26,19 @@ export class UsersService {
     return this.findAllUser()
   }
 
+  async findUserExistentByEmail(email) {
+    const user = await this.usersRepository.findOne({
+      where: { email: email }});
+    if (!user) {
+      return false;
+    }
+    return true;
+  }
+ 
   async findOneByEmail(email) {
     const user = await this.usersRepository.findOne({
       where: { email: email },
-      relations: ['roles-permissions', 'roles-permissions.roles'],
+      relations: ['roles', 'roles.permissions'],
     });
     if (!user) {
       throw new NotFoundException("Usuario no encontrado");

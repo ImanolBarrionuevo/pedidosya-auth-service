@@ -7,8 +7,8 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { Request } from 'express'; //No se usa
-import { RequestWithUser } from '../common/interface/request-user'
+import { Request } from 'express'; 
+import { RequestWithUser } from '../common/interface/request-user';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from 'src/users/users.service';
 import { jwtConstants } from 'src/common/jwt/jwt.constants';
@@ -46,7 +46,7 @@ export class AuthGuard implements CanActivate {
       );
       // Si no se definieron permisos en la ruta, se permite el acceso
       if (requiredPermissions && requiredPermissions.length > 0) {
-        const userPermissions: string[] = (user.role.permissions || []).map(permission => permission.code); //Traemos todos los permisos del usuario
+        const userPermissions: string[] = (user.roles.permissions || []).map(permission => permission.code); //Traemos todos los permisos del usuario
         const hasPermission = requiredPermissions.every(permission => 
           userPermissions.includes(permission.toString()) //Convertimos de tipo Permissions (enum) a string
         );

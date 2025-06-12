@@ -1,4 +1,4 @@
-import {BadRequestException, HttpException, Injectable} from '@nestjs/common';
+import {BadRequestException, HttpException, Injectable, NotFoundException} from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { LoginAuthDto } from './dto/login-auth.dto';
@@ -7,6 +7,7 @@ import { hash, compare } from 'bcrypt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserEntity } from 'src/common/entities/users.entity';
+import { RoleEntity } from 'src/common/entities/roles.entity';
 
 @Injectable()
 export class AuthService {
@@ -15,24 +16,31 @@ export class AuthService {
     private readonly userRepository: Repository<UserEntity>,
     private readonly usersService: UsersService,
     private readonly jwtService: JwtService,
+    @InjectRepository(RoleEntity)
+    private readonly roleRepository: Repository<RoleEntity>
   ) {}
 
   async register(userObjectRegister:RegisterAuthDto) {
-    const user = await this.usersService.findOneByEmail(userObjectRegister.email)
-    if (user) {
+    const userExistent = await this.usersService.findUserExistentByEmail(userObjectRegister.email)
+    if (userExistent) {
       throw new BadRequestException("Email ya registrado");
     }
-    const {password} = userObjectRegister //Esta en texto plano (12345)
-    const plainToHash = await hash(password, 10) //Numero de aleatoriedad de la constraseña ($y/ysd83)
-    userObjectRegister = {...userObjectRegister, password:plainToHash};
-    const userWithRole = {
-      ...userObjectRegister, 
-      role: {id: userObjectRegister.role}
+    const roleFound = await this.roleRepository.findOneBy({ id: userObjectRegister.role });
+    if (!roleFound) {
+      throw new NotFoundException("El rol no existe");
     }
-    const newUser = this.userRepository.create(userWithRole)
+    const {  email, password, name} = userObjectRegister; //Esta en texto plano (12345)
+    const plainToHash = await hash(password, 10) //Numero de aleatoriedad de la constraseña ($y/ysd83)
+    
+    const newUser = this.userRepository.create({
+      email,
+      name,
+      password: plainToHash,
+      roles: roleFound // Rol por defecto
+    });
     return this.userRepository.save(newUser)
   }
-
+ 
   async login(userObjectLogin: LoginAuthDto) {
     const {email, password} = userObjectLogin;
     const findUser = await this.userRepository.findOne({where: {email}})
