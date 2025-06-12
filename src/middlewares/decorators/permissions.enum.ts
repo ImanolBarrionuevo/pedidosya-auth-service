@@ -9,8 +9,8 @@ export enum Permissions {
   ReadRole = 'READ_ROLE',
   DeleteRole = 'DELETE_ROLE',
 
-  CreatePermision = 'CREATE_PERMISION',
-  ModifyPermision = 'MODIFY_PERMISION',
-  ReadPermision = 'READ_PERMISION',
-  DeletePermision = 'DELETE_PERMISION'
+  CreatePermission = 'CREATE_PERMISSION',
+  ModifyPermission = 'MODIFY_PERMISSION',
+  ReadPermission = 'READ_PERMISSION',
+  DeletePermission = 'DELETE_PERMISSION'
 }

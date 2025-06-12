@@ -30,16 +30,19 @@ export class UsersController {
   }
 
   @Put(':id')
+  @PermissionsDecorator(Permissions.ModifyUser)
   putUser(@Param('id') idUser: number, @Body() updateUser: CreateUserDto) {
     return this.usersService.updateUser(idUser, updateUser)
   }
 
   @Patch(':id')
+  @PermissionsDecorator(Permissions.ModifyUser)
   patchUser(@Param('id') idUser: number, @Body() partialUpdateUser: UpdateUserDto) {
     return this.usersService.partialUpdateUser(idUser, partialUpdateUser)
   }
 
   @Delete(':id')
+  @PermissionsDecorator(Permissions.DeleteUser)
   deleteUser(@Param('id') idUser: number) {
     return this.usersService.deleteUser(idUser)
   }
