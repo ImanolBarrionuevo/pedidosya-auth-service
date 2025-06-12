@@ -33,7 +33,8 @@ export class AuthGuard implements CanActivate {
       const payload = await this.jwtService.verifyAsync(
         token,
         {
-          secret: jwtConstants.secret
+          secret: jwtConstants.secretAuth,
+          algorithms: ['HS256']
         }
       );
       //Buscamos al usuario por si se actualizan los permisos, no tener que esperar actualización del token
@@ -65,4 +66,4 @@ export class AuthGuard implements CanActivate {
     return type === 'Bearer' ? token : undefined;
   }
 }
-
+ 

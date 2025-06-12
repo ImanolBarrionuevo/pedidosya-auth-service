@@ -29,7 +29,6 @@ export class PermissionsService {
     async findPermission(id: number) {
         const permission = await this.permissionsRepository.findOne({
             where: { id: id },
-            relations: ['roles-permissions', 'roles-permissions.roles'],
         });
         if (!permission) {
             throw new NotFoundException("Usuario no encontrado");

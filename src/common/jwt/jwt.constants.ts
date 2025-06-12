@@ -1,3 +1,4 @@
 export const jwtConstants = {
-    secret:'secret'
+    secretAuth: 'secretAuth',
+    secretRefresh: 'secretRefresh'
 }

@@ -2,31 +2,30 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { sign, verify } from 'jsonwebtoken';
 import * as dayjs from 'dayjs';
 import { JwtPayload } from 'jsonwebtoken';
+import { jwtConstants } from './jwt.constants';
 
+//Se podria usar el jwt.constant como secret?
 @Injectable()
 export class JwtService {
   // config.ts
   config = {
     auth: { //token de autenticación
-      secret: 'authSecret',
+      secret: jwtConstants.secretAuth,
       expiresIn: '15m', //Expira en 15 minutos
     },
     refresh: { //token de refresco
-      secret: 'refreshSecret',
+      secret: jwtConstants.secretRefresh,
       expiresIn: '1d', //Expira en 1 día
     },
   };
 
-  generateToken( //crea un JWT usando jsonwebtoken.sign()
-    payload: { email: string },
-    type: 'refresh' | 'auth' = 'auth',
-  ): string {
+  generateToken(payload, type: 'refresh' | 'auth' = 'auth',): string {                                        //crea un JWT usando jsonwebtoken.sign()
     return sign(payload, this.config[type].secret, {
       expiresIn: this.config[type].expiresIn,
     });
   }
 
-  refreshToken(refreshToken: string): { accessToken: string, refreshToken: string } { //obtiene el payload del refresh token y calcula el tiempo restante hasta la expiración usando dayjs
+  /*refreshToken(refreshToken: string): { accessToken: string, refreshToken: string } { //obtiene el payload del refresh token y calcula el tiempo restante hasta la expiración usando dayjs
     try {
       const payload = this.getPayload(refreshToken, 'refresh')
       // Obtiene el tiempo restante en minutos hasta la expiración
@@ -41,7 +40,7 @@ export class JwtService {
     } catch (error) {
       throw new UnauthorizedException(); //si el refreshToken no es valido lanza un error
     }
-  }
+  }*/
 
   getPayload(token: string, type: 'refresh' | 'auth' = 'auth'): JwtPayload { //verifica el token con jsonwebtoken.verify()
     return verify(token, this.config[type].secret) as JwtPayload;

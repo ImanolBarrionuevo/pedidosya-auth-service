@@ -16,7 +16,6 @@ export class CreateUserDto {
     password: string;
 
     @IsNotEmpty({ message: 'El ID del rol es obligatorio.' })
-    @Transform(({ value }) => ({ id: value }))
-    role: { id: number };
-
+    @Transform(({ value }) => ({ id: value}))
+    roles: { id: number };
 }

@@ -4,10 +4,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/patch-user.dto';
+import { RoleEntity } from 'src/common/entities/roles.entity';
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectRepository(UserEntity) private usersRepository: Repository<UserEntity>) { }
+  constructor(
+    @InjectRepository(UserEntity) private usersRepository: Repository<UserEntity>,
+    @InjectRepository(RoleEntity) private roleRepository: Repository<RoleEntity>  
+  ) { }
 
   async createUser(user: CreateUserDto) {
     const newUser = this.usersRepository.create(user)
@@ -20,10 +24,6 @@ export class UsersService {
       relations: ['roles', 'roles.permissions'],
     });
     return allUsers
-  }
-
-  async findUsers() {
-    return this.findAllUser()
   }
 
   async findUserExistentByEmail(email) {
@@ -49,30 +49,42 @@ export class UsersService {
   async findUser(id: number) {
     const user = await this.usersRepository.findOne({
       where: { id: id },
-      relations: ['roles-permissions', 'roles-permissions.roles'],
+      relations: ['roles', 'roles.permissions'],
     });
     if (!user) {
       throw new NotFoundException("Usuario no encontrado");
     }
     return user
   }
-  async updateUser(id: number, updateUser: CreateUserDto) {
+
+  async updateUser(id: number, updateUser: UpdateUserDto) {
     await this.usersRepository.update(id, updateUser)
     return this.findUser(id)
   }
 
-  async partialUpdateUser(id: number, updateUser: UpdateUserDto) {
-    const user = await this.usersRepository.findOne({ where: { id: id } })
+  async partialUpdateUser(id: number, updateUserDto: UpdateUserDto) {
+
+    const user = await this.usersRepository.findOne({ where: { id } });
     if (!user) {
       throw new NotFoundException("Usuario no encontrado");
     }
 
-    Object.keys(updateUser).forEach(column => {
-      user[column] = updateUser[column];
-    })
+    // Si el DTO tiene una propiedad relacional para el rol, actualízala de forma explícita.
+    if (updateUserDto.role) {
+      // Suponiendo que updateUserDto.role es un número (el ID del rol)
+      const roleEntity = await this.roleRepository.findOne({ where: { id: updateUserDto.role.id } });
+      if (roleEntity) {
+        user.roles = roleEntity;
+      }
+    }
 
-    await this.usersRepository.update(id, user)
-    return user
+    // Actualiza las propiedades simples que el DTO puede tener.
+    // Puedes usar Object.assign para las propiedades simples que no sean relaciones.
+    Object.assign(user, updateUserDto);
+
+    // Guarda la entidad completa para que se actualicen tanto columnas simples como relaciones.
+    const updatedUser = await this.usersRepository.save(user);
+    return updatedUser;
   }
 
   async deleteUser(id: number) {
