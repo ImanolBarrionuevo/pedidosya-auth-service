@@ -10,6 +10,6 @@ export class RoleEntity {
   name: string; //Ej: Admin, user
 
   @ManyToMany(() => PermissionEntity, permission => permission.roles)
-  @JoinTable()
-  permissions: PermissionEntity[]
+  @JoinTable({ name: 'roles_permissions' }) // Nombre de la tabla intermedia
+  permissions: PermissionEntity[];
 }

@@ -21,7 +21,7 @@ INSERT INTO roles (name) VALUES
     ('Moderator');
 
 
-INSERT INTO roles_permissions_permissions ("rolesId", "permissionsId") VALUES 
+INSERT INTO roles_permissions ("rolesId", "permissionsId") VALUES 
     (1,3),
     (3,1),
     (3,2),
