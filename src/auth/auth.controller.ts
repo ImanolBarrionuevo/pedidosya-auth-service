@@ -2,10 +2,14 @@ import { Controller, Post, Body, HttpCode} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { RegisterAuthDto } from './dto/register-auth.dto';
 import { LoginAuthDto } from './dto/login-auth.dto';
+import { JwtService } from 'src/common/jwt/jwt.service';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly jwtService: JwtService
+  ) {}
 
 
   @Post('register')
@@ -19,15 +23,9 @@ export class AuthController {
     return this.authService.login(loginAuthDto);
   }
 
-  /*@Post('refresh')
-  refreshTocken(){
-
-  }*/
-
-  /*@Get('profile')
-  @Auth(Role.USER)
-  profile(@ActiveUser() user: UserActiveInterface) {
-    console.log(user)
-    return this.authService.profile(user);
-  }*/
+  @HttpCode(200)
+  @Post('refresh')
+  refresh(@Body('token') token: string){
+    return this.jwtService.refreshToken(token)
+  }
 }

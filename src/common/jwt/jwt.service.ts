@@ -25,11 +25,11 @@ export class JwtService {
     });
   }
 
-  /*refreshToken(refreshToken: string): { accessToken: string, refreshToken: string } { //obtiene el payload del refresh token y calcula el tiempo restante hasta la expiración usando dayjs
+  refreshToken(refreshToken: string): { accessToken: string, refreshToken: string } { //obtiene el payload del refresh token y calcula el tiempo restante hasta la expiración usando dayjs
     try {
       const payload = this.getPayload(refreshToken, 'refresh')
       // Obtiene el tiempo restante en minutos hasta la expiración
-      const timeToExpire = dayjs.unix(payload.exp).diff(dayjs(), 'minute');
+      const timeToExpire = dayjs.unix(payload.exp!).diff(dayjs(), 'minute');
       return { //si faltan menos de 20 minutos para que expire, genera un nuevo refresh token y si aun es valido lo reutiliza
         accessToken: this.generateToken({ email: payload.email }),
         refreshToken:
@@ -40,7 +40,7 @@ export class JwtService {
     } catch (error) {
       throw new UnauthorizedException(); //si el refreshToken no es valido lanza un error
     }
-  }*/
+  }
 
   getPayload(token: string, type: 'refresh' | 'auth' = 'auth'): JwtPayload { //verifica el token con jsonwebtoken.verify()
     return verify(token, this.config[type].secret) as JwtPayload;
