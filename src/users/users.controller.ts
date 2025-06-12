@@ -14,7 +14,7 @@ export class UsersController {
   }
 
   @Get()
-  getRole() {
+  getUsers() {
     return this.usersService.findUsers()
   }
 

@@ -12,7 +12,7 @@ import { RequestWithUser } from '../common/interface/request-user';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from 'src/users/users.service';
 import { jwtConstants } from 'src/common/jwt/jwt.constants';
-import { PERMISSIONS_KEY} from './decorators/permissions.decorator';
+import { PERMISSIONS_KEY } from './decorators/permissions.decorator';
 
 
 @Injectable()
@@ -20,8 +20,8 @@ export class AuthGuard implements CanActivate {
   constructor(
     private jwtService: JwtService,
     private usersService: UsersService,
-    private reflector:Reflector
-  ) {}
+    private reflector: Reflector
+  ) { }
   async canActivate(context: ExecutionContext): Promise<boolean> {
     try {
       const request: RequestWithUser = context.switchToHttp().getRequest();
