@@ -15,8 +15,8 @@ INSERT INTO permissions (code) VALUES
     ('DELETE_PERMISION');
 
 INSERT INTO roles (name) VALUES 
-    ('User'),
     ('Guest'),
+    ('User'),
     ('Admin'),
     ('Moderator');
 

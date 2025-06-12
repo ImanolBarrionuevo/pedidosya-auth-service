@@ -16,7 +16,7 @@ export class UpdateUserDto extends PartialType(CreateUserDto){
 
     @IsNumber({}, { message: 'El ID del rol debe ser numérico.' })
     //@Transform(({ value }) => ({ id: value }))
-    role?: { id: number };
+    role?: number ;
 
 }
 
