@@ -1,5 +1,3 @@
-//ACTUALIZAR LOGICA DEL CAN ACTIVATE 
-
 import {
   CanActivate,
   ExecutionContext,
@@ -13,7 +11,6 @@ import { JwtService } from '@nestjs/jwt';
 import { UsersService } from 'src/users/users.service';
 import { jwtConstants } from 'src/common/jwt/jwt.constants';
 import { PERMISSIONS_KEY } from './decorators/permissions.decorator';
-
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -41,6 +38,7 @@ export class AuthGuard implements CanActivate {
       const user = await this.usersService.findOneByEmail(payload.email);
       request.user = user;
       //Lógica permisos
+      //ACA TENDRIA QUE CARGARLE LOS permissions: PermissionEntity[] al permissions.decorator.ts
       const requiredPermissions = this.reflector.get<Permissions[]>(
         PERMISSIONS_KEY,
         context.getHandler()

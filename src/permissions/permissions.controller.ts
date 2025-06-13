@@ -44,7 +44,7 @@ export class PermissionsController {
     }
 
     @Delete(':id')
-     @PermissionsDecorator(Permissions.DeletePermission)
+    @PermissionsDecorator(Permissions.DeletePermission)
     deletePermission(@Param('id') idPermission: number) {
         return this.permissionsService.deletePermission(idPermission)
     }

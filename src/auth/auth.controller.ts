@@ -28,4 +28,11 @@ export class AuthController {
   refresh(@Body('refreshToken') refreshToken:string){
     return this.jwtService.refreshToken(refreshToken)
   }
+  //Comprobar
+  @Post('/can-do')
+  async canDo(@Body() body: { token: string; permissions: string[] }) {
+    const { token, permissions } = body;
+    const allowed = await this.authService.canUserDo(token, permissions);
+    return { allowed };
+  }
 }

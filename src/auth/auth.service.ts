@@ -1,4 +1,4 @@
-import { BadRequestException, HttpException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, HttpException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
 import { JwtService } from 'src/common/jwt/jwt.service';
 import { LoginAuthDto } from './dto/login-auth.dto';
@@ -66,4 +66,18 @@ export class AuthService {
 
     return data
   }
+
+  //Comprobar
+  async canUserDo(token: string, permissions: string[]): Promise<boolean> {
+  try {
+    const payload = this.jwtService.getPayload(token, 'auth');
+
+    const userPerms: string[] = (payload.permissions || []).map(p => p.code);
+    const hasAllPermissions = permissions.every(p => userPerms.includes(p));
+
+    return hasAllPermissions;
+  } catch (error) {
+    throw new UnauthorizedException('Token inválido');
+  }
+}
 }

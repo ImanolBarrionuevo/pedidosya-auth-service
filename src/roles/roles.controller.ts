@@ -9,7 +9,7 @@ import { AuthGuard } from 'src/middlewares/auth.middleware';
 
 
 @Controller('roles')
-@UseGuards(AuthGuard)
+@UseGuards(AuthGuard) 
 export class RolesController {
 
     constructor(private rolesService: RolesService) { }
