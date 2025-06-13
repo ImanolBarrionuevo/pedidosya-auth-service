@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { JwtStrategy } from './jwt.strategy';
 import { jwtConstants } from './jwt.constants';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
@@ -14,7 +13,7 @@ import { PassportModule } from '@nestjs/passport';
       secret: jwtConstants.secretAuth,
       signOptions: { expiresIn: '1h', algorithm: 'HS256' },
       })],
-  providers: [JwtStrategy],
-  exports: [JwtModule, JwtStrategy],
+  providers: [],
+  exports: [JwtModule],
 })
 export class JwtAuthModule {}

@@ -13,17 +13,16 @@ export class RolesService {
     ) { }
 
     async createRole(createRoleDto: CreateRoleDto) {
-        // Creamos la entidad a partir del DTO
         const role = this.rolesRepository.create({
             name: createRoleDto.name,
         });
 
-        // Buscamos los permisos usando los IDs enviados
+        // Buscamos los permisos usando los IDs enviados.
         if (createRoleDto.permissionIds && createRoleDto.permissionIds.length > 0) {
             role.permissions = await this.permissionsRepository.findByIds(createRoleDto.permissionIds);
         }
 
-        // Guardamos el rol, llenando la tabla intermedia
+        // Guardamos el rol.
         await this.rolesRepository.save(role);
         return await this.findRole(role.id)
     }
@@ -35,16 +34,12 @@ export class RolesService {
         return allRoles
     }
 
-    async findRoles() {
-        return this.findAllRole()
-    }
-
     async findRole(id: number) {
         const role = await this.rolesRepository.findOne({
             where: { id: id },
         });
         if (!role) {
-            throw new NotFoundException("Usuario no encontrado");
+            throw new NotFoundException("Role Not Found");
         }
         return role
     }
@@ -57,10 +52,9 @@ export class RolesService {
 
         const role = await this.rolesRepository.findOne({ where: { id } });
         if (!role) {
-            throw new NotFoundException("Rol no encontrado");
+            throw new NotFoundException("Role Not Found");
         }
 
-        // Si el DTO tiene una propiedad relacional para el rol, actualízala de forma explícita.
         if (updateRoleDto.permissionIds && updateRoleDto.permissionIds.length > 0) {
             const permissionsEntities: PermissionEntity[] = [];
             for (const id of updateRoleDto.permissionIds) {
@@ -72,7 +66,7 @@ export class RolesService {
             role.permissions = permissionsEntities;
         }
 
-        // Actualiza las propiedades de un objeto a un objeto destino.
+        // Actualizamos las propiedades de un objeto a un objeto destino.
         Object.assign(role, updateRoleDto);
 
         // Guarda la entidad completa para que se actualicen tanto columnas simples como relaciones.

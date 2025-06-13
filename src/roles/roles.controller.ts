@@ -23,7 +23,7 @@ export class RolesController {
     @Get()
     @PermissionsDecorator(Permissions.ReadRole)
     getRoles() {
-        return this.rolesService.findRoles()
+        return this.rolesService.findAllRole()
     }
 
     @Get(':id')

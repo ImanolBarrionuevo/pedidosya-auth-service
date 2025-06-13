@@ -27,10 +27,11 @@ export class PermissionsService {
             where: { id: id },
         });
         if (!permission) {
-            throw new NotFoundException("Usuario no encontrado");
+            throw new NotFoundException("Permission Not Found");
         }
         return permission
     }
+
     async updatePermission(id: number, updatePermission: CreatePermissionDto) {
         await this.permissionsRepository.update(id, updatePermission)
         return this.findPermission(id)
@@ -39,7 +40,7 @@ export class PermissionsService {
     async partialUpdatePermission(id: number, updatePermission: UpdatePermissionDto) {
         const permission = await this.permissionsRepository.findOne({ where: { id: id } })
         if (!permission) {
-            throw new NotFoundException("Usuario no encontrado");
+            throw new NotFoundException("Permission Not Found");
         }
 
         Object.keys(updatePermission).forEach(column => {

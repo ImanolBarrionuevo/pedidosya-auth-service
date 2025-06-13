@@ -37,7 +37,7 @@ export class UsersService {
       relations: ['roles', 'roles.permissions'],
     });
     if (!user) {
-      throw new NotFoundException("Usuario no encontrado");
+      throw new NotFoundException("User Not Found");
     }
     return user
   }
@@ -48,7 +48,7 @@ export class UsersService {
       relations: ['roles', 'roles.permissions'],
     });
     if (!user) {
-      throw new NotFoundException("Usuario no encontrado");
+      throw new NotFoundException("User Not Found");
     }
     return user
   }
@@ -62,23 +62,20 @@ export class UsersService {
 
     const user = await this.usersRepository.findOne({ where: { id } });
     if (!user) {
-      throw new NotFoundException("Usuario no encontrado");
+      throw new NotFoundException("User Not Found");
     }
 
-    // Si el DTO tiene una propiedad relacional para el rol, actualízala de forma explícita.
     if (updateUserDto.role) {
-      // Suponiendo que updateUserDto.role es un número (el ID del rol)
       const roleEntity = await this.roleRepository.findOne({ where: { id: updateUserDto.role} });
       if (roleEntity) {
         user.roles = roleEntity;
       }
     }
 
-    // Actualiza las propiedades simples que el DTO puede tener.
-    // Puedes usar Object.assign para las propiedades simples que no sean relaciones.
+    // Actualizamos las propiedades de un objeto a un objeto destino.
     Object.assign(user, updateUserDto);
 
-    // Guarda la entidad completa para que se actualicen tanto columnas simples como relaciones.
+    // Guardamos la entidad completa para que se actualicen tanto columnas simples como relaciones.
     const updatedUser = await this.usersRepository.save(user);
     return updatedUser;
   }
