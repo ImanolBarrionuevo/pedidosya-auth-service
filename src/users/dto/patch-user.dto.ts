@@ -1,8 +1,8 @@
 import { PartialType } from "@nestjs/mapped-types";
-import { IsString, IsEmail, IsNumber, IsOptional } from "class-validator"; //Eliminar importaciones que no se utilicen
+import { IsString, IsEmail, IsNumber, IsOptional } from "class-validator";
 import { CreateUserDto } from "./create-user.dto";
 
-export class UpdateUserDto extends PartialType(CreateUserDto){
+export class UpdateUserDto extends PartialType(CreateUserDto) {
 
     @IsOptional()
     @IsString({ message: 'El nombre debe ser un texto.' })
@@ -18,7 +18,7 @@ export class UpdateUserDto extends PartialType(CreateUserDto){
 
     @IsOptional()
     @IsNumber({}, { message: 'El ID del rol debe ser numérico.' })
-    role?: number ;
+    role?: number;
 
 }
 

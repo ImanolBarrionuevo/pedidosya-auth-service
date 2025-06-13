@@ -1,8 +1,8 @@
 import { PartialType } from "@nestjs/mapped-types";
-import { IsString, IsArray, IsInt, IsOptional } from "class-validator"; //Eliminar importaciones que no se utilicen
+import { IsString, IsArray, IsInt, IsOptional } from "class-validator";
 import { CreateRoleDto } from "./create-role.dto";
 
-export class UpdateRoleDto extends PartialType(CreateRoleDto){
+export class UpdateRoleDto extends PartialType(CreateRoleDto) {
     @IsOptional()
     @IsString()
     name?: string

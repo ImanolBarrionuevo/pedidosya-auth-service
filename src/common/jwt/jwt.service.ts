@@ -4,7 +4,6 @@ import * as dayjs from 'dayjs';
 import { JwtPayload } from 'jsonwebtoken';
 import { jwtConstants } from './jwt.constants';
 
-//Se podria usar el jwt.constant como secret?
 @Injectable()
 export class JwtService {
   // config.ts

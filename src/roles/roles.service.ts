@@ -57,23 +57,23 @@ export class RolesService {
 
         const role = await this.rolesRepository.findOne({ where: { id } });
         if (!role) {
-        throw new NotFoundException("Rol no encontrado");
+            throw new NotFoundException("Rol no encontrado");
         }
 
         // Si el DTO tiene una propiedad relacional para el rol, actualízala de forma explícita.
         if (updateRoleDto.permissionIds && updateRoleDto.permissionIds.length > 0) {
-        const permissionsEntities: PermissionEntity[] = [];
-        for (const id of updateRoleDto.permissionIds) {
-            const permissionEntity = await this.permissionsRepository.findOne({ where: { id } });
-            if (permissionEntity) {
-            permissionsEntities.push(permissionEntity);
+            const permissionsEntities: PermissionEntity[] = [];
+            for (const id of updateRoleDto.permissionIds) {
+                const permissionEntity = await this.permissionsRepository.findOne({ where: { id } });
+                if (permissionEntity) {
+                    permissionsEntities.push(permissionEntity);
+                }
             }
-        }
-        role.permissions = permissionsEntities;
+            role.permissions = permissionsEntities;
         }
 
         // Actualiza las propiedades de un objeto a un objeto destino.
-        Object.assign(role, updateRoleDto); 
+        Object.assign(role, updateRoleDto);
 
         // Guarda la entidad completa para que se actualicen tanto columnas simples como relaciones.
         await this.rolesRepository.save(role);
@@ -84,6 +84,5 @@ export class RolesService {
         await this.rolesRepository.delete(id);
         return { "message": "deleted" }
     }
-
 
 }
