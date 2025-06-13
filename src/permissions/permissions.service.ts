@@ -22,10 +22,6 @@ export class PermissionsService {
         return allPermissions
     }
 
-    async findPermissions() {
-        return this.findAllPermission()
-    }
-
     async findPermission(id: number) {
         const permission = await this.permissionsRepository.findOne({
             where: { id: id },

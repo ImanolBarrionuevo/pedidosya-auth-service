@@ -10,7 +10,8 @@ import { RoleEntity } from 'src/common/entities/roles.entity';
 export class UsersService {
   constructor(
     @InjectRepository(UserEntity) private usersRepository: Repository<UserEntity>,
-    @InjectRepository(RoleEntity) private roleRepository: Repository<RoleEntity>  
+    @InjectRepository(RoleEntity) private roleRepository: Repository<RoleEntity>,
+    
   ) { }
 
   async createUser(user: CreateUserDto) {
@@ -64,10 +65,8 @@ export class UsersService {
 
   async partialUpdateUser(id: number, updateUserDto: UpdateUserDto) {
 
-    console.log("entre1")
     const user = await this.usersRepository.findOne({ where: { id } });
     if (!user) {
-      console.log("entre2")
       throw new NotFoundException("Usuario no encontrado");
     }
 

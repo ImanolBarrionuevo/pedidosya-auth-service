@@ -25,6 +25,7 @@ export class UsersController {
   }
 
   @Get(':id')
+  @PermissionsDecorator(Permissions.ReadUser)
   getUser(@Param('id') idUser: number) {
     return this.usersService.findUser(idUser)
   }

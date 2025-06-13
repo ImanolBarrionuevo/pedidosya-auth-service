@@ -55,16 +55,15 @@ export class AuthService {
     if (!checkPassword) throw new HttpException('PASSWORD_INCORRECT', 403)
 
     const payload = { email: findUser.email, permissions: findUser.roles.permissions }
-    const accesToken = await this.jwtService.generateToken(payload)
 
     const data = {
-      accesToken,
-      'user': findUser
+      accesToken: await this.jwtService.generateToken(payload),
+      refreshToken: await this.jwtService.generateToken(
+        {email : findUser.email},
+        'refresh'
+      )
     };
 
     return data
-
   }
-
-
 }

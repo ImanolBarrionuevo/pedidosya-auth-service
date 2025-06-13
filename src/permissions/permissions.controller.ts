@@ -22,7 +22,7 @@ export class PermissionsController {
     @Get()
     @PermissionsDecorator(Permissions.ReadPermission)
     getPermissions() {
-        return this.permissionsService.findPermissions()
+        return this.permissionsService.findAllPermission()
     }
 
     @Get(':id')

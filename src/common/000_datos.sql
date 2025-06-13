@@ -9,10 +9,10 @@ INSERT INTO permissions (code) VALUES
     ('MODIFY_ROLE'),
     ('READ_ROLE'),
     ('DELETE_ROLE'),
-    ('CREATE_PERMISION'),
-    ('MODIFY_PERMISION'),
-    ('READ_PERMISION'),
-    ('DELETE_PERMISION');
+    ('CREATE_PERMISSION'),
+    ('MODIFY_PERMISSION'),
+    ('READ_PERMISSION'),
+    ('DELETE_PERMISSION');
 
 INSERT INTO roles (name) VALUES 
     ('Guest'),
