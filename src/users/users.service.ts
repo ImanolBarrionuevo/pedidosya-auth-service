@@ -2,7 +2,6 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { UserEntity } from '../common/entities/users.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/patch-user.dto';
 import { RoleEntity } from 'src/common/entities/roles.entity';
 
@@ -14,11 +13,7 @@ export class UsersService {
     
   ) { }
 
-  async createUser(user: CreateUserDto) {
-    const newUser = this.usersRepository.create(user)
-    await this.usersRepository.insert(newUser)
-    return await this.findUser(newUser.id)
-  }
+  // El createUser está implementado únicamente en el register
 
   async findAllUser() {
     const allUsers = await this.usersRepository.find({

@@ -1,7 +1,6 @@
 \c authuser
 
 INSERT INTO permissions (code) VALUES 
-    ('CREATE_USER'),
     ('MODIFY_USER'),
     ('READ_USER'),
     ('DELETE_USER'),
@@ -38,7 +37,7 @@ INSERT INTO roles (name) VALUES
 
 
 INSERT INTO roles_permissions ("rolesId", "permissionsId") VALUES 
-    (2,3),
+    (2,2),
     (3,1),
     (3,2),
     (3,3),
@@ -50,7 +49,6 @@ INSERT INTO roles_permissions ("rolesId", "permissionsId") VALUES
     (3,9),
     (3,10),
     (3,11),
-    (3,12),
     (4,1),
     (4,2),
     (4,3),
@@ -76,8 +74,7 @@ INSERT INTO roles_permissions ("rolesId", "permissionsId") VALUES
     (4,23),
     (4,24),
     (4,25),
-    (4,26),
-    (4,27);
+    (4,26);
 
 INSERT INTO users (name, email, password, "rolesId") VALUES
     ('Marquito', 'marquito@gmail.com', '1234567', 1),

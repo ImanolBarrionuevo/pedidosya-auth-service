@@ -1,7 +1,7 @@
 import { IsEmail, IsNotEmpty, IsString } from "class-validator";
 import { Transform } from 'class-transformer';
 
-export class CreateUserDto {
+export class PutUserDto {
 
     @IsNotEmpty({ message: 'El nombre es obligatorio.' })
     @IsString({ message: 'El nombre debe ser un texto.' })
@@ -18,4 +18,5 @@ export class CreateUserDto {
     @IsNotEmpty({ message: 'El ID del rol es obligatorio.' })
     @Transform(({ value }) => ({ id: value}))
     roles: { id: number };
+    
 }

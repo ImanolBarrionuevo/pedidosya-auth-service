@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Param, Post, Put, Patch, Delete, UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/create-user.dto';
+import { PutUserDto } from './dto/put-user.dto';
 import { UpdateUserDto } from './dto/patch-user.dto';
 import { Permissions } from 'src/middlewares/decorators/permissions.enum';
 import { PermissionsDecorator } from 'src/middlewares/decorators/permissions.decorator';
@@ -11,12 +11,6 @@ import { AuthGuard } from 'src/middlewares/auth.middleware';
 export class UsersController {
 
   constructor(private usersService: UsersService) { }
-
-  @Post()
-  @PermissionsDecorator(Permissions.CreateUser)
-  postUser(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.createUser(createUserDto)
-  }
 
   @Get()
   @PermissionsDecorator(Permissions.ReadUser)
@@ -32,7 +26,7 @@ export class UsersController {
 
   @Put(':id')
   @PermissionsDecorator(Permissions.ModifyUser)
-  putUser(@Param('id') idUser: number, @Body() updateUser: CreateUserDto) {
+  putUser(@Param('id') idUser: number, @Body() updateUser: PutUserDto) {
     return this.usersService.updateUser(idUser, updateUser)
   }
 
