@@ -12,7 +12,23 @@ INSERT INTO permissions (code) VALUES
     ('CREATE_PERMISSION'),
     ('MODIFY_PERMISSION'),
     ('READ_PERMISSION'),
-    ('DELETE_PERMISSION');
+    ('DELETE_PERMISSION'),
+    ('CREATE_PERSON'),
+    ('MODIFY_PERSON'),
+    ('READ_PERSON'),
+    ('DELETE_PERSON'),
+    ('CREATE_CITY'),
+    ('MODIFY_CITY'),
+    ('READ_CITY'),
+    ('DELETE_CITY'),
+    ('CREATE_PROVINCE'),
+    ('MODIFY_PROVINCE'),
+    ('READ_PROVINCE'),
+    ('DELETE_PROVINCE'),
+    ('CREATE_COUNTRY'),
+    ('MODIFY_COUNTRY'),
+    ('READ_COUNTRY'),
+    ('DELETE_COUNTRY');
 
 INSERT INTO roles (name) VALUES 
     ('Guest'),
