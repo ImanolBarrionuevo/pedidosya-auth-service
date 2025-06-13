@@ -73,7 +73,11 @@ INSERT INTO roles_permissions ("rolesId", "permissionsId") VALUES
     (4,20),
     (4,21),
     (4,22),
-    (4,23);
+    (4,23),
+    (4,24),
+    (4,25),
+    (4,26),
+    (4,27);
 
 INSERT INTO users (name, email, password, "rolesId") VALUES
     ('Marquito', 'marquito@gmail.com', '1234567', 1),
