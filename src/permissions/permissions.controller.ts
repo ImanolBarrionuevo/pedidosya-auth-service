@@ -8,7 +8,7 @@ import { PermissionsDecorator } from 'src/middlewares/decorators/permissions.dec
 import { AuthGuard } from 'src/middlewares/auth.middleware';
 
 @Controller('permissions')
-@UseGuards(AuthGuard)
+//@UseGuards(AuthGuard)
 export class PermissionsController {
 
     constructor(private permissionsService: PermissionsService) { }
