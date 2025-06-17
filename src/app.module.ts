@@ -27,6 +27,6 @@ import { PermissionsModule } from './permissions/permissions.module';
     PermissionsModule
   ],
   controllers: [AppController, UsersController],
-  providers: [], //FALTA AuthGuard
+  providers: [], 
 })
 export class AppModule { }

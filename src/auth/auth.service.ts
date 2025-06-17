@@ -67,7 +67,6 @@ export class AuthService {
     return data
   }
 
-  //Comprobar
   async canUserDo(token: string, permissions: string[]): Promise<boolean> {
   try {
     const payload = this.jwtService.getPayload(token, 'auth');
