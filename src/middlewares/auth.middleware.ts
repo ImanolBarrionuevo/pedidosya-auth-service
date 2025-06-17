@@ -37,8 +37,7 @@ export class AuthGuard implements CanActivate {
       //Buscamos al usuario por si se actualizan los permisos, no tener que esperar actualización del token
       const user = await this.usersService.findOneByEmail(payload.email);
       request.user = user;
-      //Lógica permisos
-      //ACA TENDRIA QUE CARGARLE LOS permissions: PermissionEntity[] al permissions.decorator.ts
+      //Obtenemos los permisos requeridos del endpoint
       const requiredPermissions = this.reflector.get<Permissions[]>(
         PERMISSIONS_KEY,
         context.getHandler()
