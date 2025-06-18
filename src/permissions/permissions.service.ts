@@ -16,9 +16,7 @@ export class PermissionsService {
     }
 
     async findAllPermission() {
-        const allPermissions = await this.permissionsRepository.find({
-            relations: ['roles', 'roles.permissions'],
-        });
+        const allPermissions = await this.permissionsRepository.find();
         return allPermissions
     }
 
