@@ -57,7 +57,7 @@ export class AuthService {
     const payload = { email: findUser.email, permissions: findUser.roles.permissions }
 
     const data = {
-      accesToken: await this.jwtService.generateToken(payload),
+      accessToken: await this.jwtService.generateToken(payload),
       refreshToken: await this.jwtService.generateToken(
         {email : findUser.email},
         'refresh'
