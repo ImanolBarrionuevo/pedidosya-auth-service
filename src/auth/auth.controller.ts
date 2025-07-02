@@ -11,24 +11,27 @@ export class AuthController {
     private readonly jwtService: JwtService
   ) { }
 
-
+  // Registra un usuario nuevo usando los datos del DTO
   @Post('register')
   registerUser(@Body() registerAuthDto: RegisterAuthDto) {
     return this.authService.register(registerAuthDto);
   }
 
+  // Valida credenciales de acceso y retorna accessToken y refreshToken
   @HttpCode(200) //Cambiamos el code 201 Created por defecto del POST por 200 OK ya que en sí no creamos nada
   @Post('login')
   loginUser(@Body() loginAuthDto: LoginAuthDto) {
     return this.authService.login(loginAuthDto);
   }
 
+  // Renueva el token de acceso a partir de un token valido
   @HttpCode(200)
   @Post('refresh')
   refresh(@Body('refreshToken') refreshToken: string) {
     return this.jwtService.refreshToken(refreshToken)
   }
 
+  // Valida si un token tiene determinados permisos, retornando un boolean
   @Post('/can-do')
   async canDo(@Body() body: { token: string; permissions: string[] }) {
     const { token, permissions } = body;

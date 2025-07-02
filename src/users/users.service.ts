@@ -67,9 +67,10 @@ export class UsersService {
 
     if (updateUserDto.role) {
       const roleEntity = await this.roleRepository.findOne({ where: { id: updateUserDto.role} });
-      if (roleEntity) {
-        user.roles = roleEntity;
+      if (!roleEntity) {
+        throw new NotFoundException("Role Not Found");
       }
+      user.roles = roleEntity;
     }
 
     // Actualizamos las propiedades de un objeto a un objeto destino.
