@@ -8,10 +8,12 @@ import { PermissionEntity } from 'src/common/entities/permissions.entity';
 
 @Injectable()
 export class RolesService {
+    // Repositorio de Roleity para operaciones CRUD en roles
     constructor(@InjectRepository(RoleEntity) private rolesRepository: Repository<RoleEntity>,
         @InjectRepository(PermissionEntity) private permissionsRepository: Repository<PermissionEntity>
     ) { }
 
+    // Creamos un rol
     async createRole(createRoleDto: CreateRoleDto) {
         const role = this.rolesRepository.create({
             name: createRoleDto.name,
@@ -27,13 +29,15 @@ export class RolesService {
         return await this.findRole(role.id)
     }
 
+    // Buscamos todos los roles
     async findAllRole() {
         const allRoles = await this.rolesRepository.find({
-            relations: ['permissions'],
+            relations: ['permissions'], // Con sus permisos relacionados
         });
         return allRoles
     }
 
+    // Buscamos un rol por su id
     async findRole(id: number) {
         const role = await this.rolesRepository.findOne({
             where: { id: id },
@@ -43,26 +47,36 @@ export class RolesService {
         }
         return role
     }
+
+    // Actualizamos un rol
     async updateRole(id: number, updateRole: CreateRoleDto) {
         await this.rolesRepository.update(id, updateRole)
         return this.findRole(id)
     }
 
+    // Actualizamos parcialmente un rol 
     async partialUpdateRole(id: number, updateRoleDto: UpdateRoleDto) {
 
+        // Verificamos que haya un rol con el id que recibimos
         const role = await this.rolesRepository.findOne({ where: { id } });
         if (!role) {
             throw new NotFoundException("Role Not Found");
         }
-
+        
+        // Si el DTO trae un arreglo de IDs de permisos y no está vacío
         if (updateRoleDto.permissionIds && updateRoleDto.permissionIds.length > 0) {
+            // Creamos un arreglo donde acumularemos las entidades PermissionEntity
             const permissionsEntities: PermissionEntity[] = [];
+             // Recorremos cada id que vino en el DTO
             for (const id of updateRoleDto.permissionIds) {
+                // Buscamos en la base de datos la entidad cuyo id coincida
                 const permissionEntity = await this.permissionsRepository.findOne({ where: { id } });
+                // Si existe esa entidad, la agregamos al arreglo
                 if (permissionEntity) {
                     permissionsEntities.push(permissionEntity);
                 }
             }
+            // Asignamos al rol la lista completa de entidades encontradas
             role.permissions = permissionsEntities;
         }
 
@@ -74,6 +88,7 @@ export class RolesService {
         return role;
     }
 
+    // Eleminamos un rol
     async deleteRole(id: number) {
         await this.rolesRepository.delete(id);
         return { "message": "deleted" }

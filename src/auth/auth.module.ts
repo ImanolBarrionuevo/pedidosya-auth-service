@@ -11,11 +11,11 @@ import { JwtService } from 'src/common/jwt/jwt.service';
 
 @Module({
   imports:[
-    TypeOrmModule.forFeature([UserEntity, RoleEntity]),
-    UsersModule,
-    JwtAuthModule
+    TypeOrmModule.forFeature([UserEntity, RoleEntity]), // Importamos entidades TypeORM para este módulo.
+    UsersModule, // Importamos UsersModule para búsqueda y validación de usuarios.
+    JwtAuthModule // Importamos el modulo de autenticacion JWT.
   ],
-  controllers: [AuthController],
-  providers: [AuthService, JwtService],
+  controllers: [AuthController], // Definimos los servicios que pueden ser inyectados en controladores y otros servicios.
+  providers: [AuthService, JwtService], // Definimos los controladores de autenticacion
 })
 export class AuthModule {}

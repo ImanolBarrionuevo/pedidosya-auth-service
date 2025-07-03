@@ -7,10 +7,10 @@ import { RoleEntity } from 'src/common/entities/roles.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([UserEntity, RoleEntity]),
-    JwtAuthModule
+    TypeOrmModule.forFeature([UserEntity, RoleEntity]), // Importamos entidades TypeORM para este módulo.
+    JwtAuthModule // Importamos el modulo de autenticacion JWT
 ],
-  providers: [UsersService],
-  exports: [UsersService], 
+  providers: [UsersService], // Definimos los servicios que pueden ser inyectados en controladores y otros servicios.
+  exports: [UsersService], //  Definimos el controlador que maneja las rutas HTTP.
 })
 export class UsersModule {}
