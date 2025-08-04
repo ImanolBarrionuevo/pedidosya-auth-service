@@ -67,13 +67,13 @@ export class AuthService {
     if (!checkPassword) throw new HttpException('PASSWORD_INCORRECT', 403)
 
     // Preparamos los datos con email y permisos del usuario para generar el accessToken
-    const payload = { email: findUser.email, permissions: findUser.roles.permissions }
+    const payload = { email: findUser.email }
 
     // Generamos accessToken y refreshToken
     const data = {
       accessToken: await this.jwtService.generateToken(payload),
       refreshToken: await this.jwtService.generateToken(
-        {email : findUser.email},
+        { email: findUser.email },
         'refresh'
       )
     };
@@ -87,7 +87,9 @@ export class AuthService {
     const payload = this.jwtService.getPayload(token, 'auth');
 
     // Obtenemos permisos del usuario
-    const userPerms: string[] = (payload.permissions || []).map(p => p.code);
+    const user = await this.usersService.findOneByEmail(payload.email);
+    const userPerms: string[] = user.roles.permissions.map(p => p.code);
+    //const userPerms: string[] = (payload.permissions || []).map(p => p.code);
 
     // Verificamos que el usuario cuente con los permisos necesarios, devolviendo un booleano
     const hasAllPermissions = permissions.every(p => userPerms.includes(p));

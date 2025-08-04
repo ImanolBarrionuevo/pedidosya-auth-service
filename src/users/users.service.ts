@@ -3,14 +3,13 @@ import { UserEntity } from '../common/entities/users.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UpdateUserDto } from './dto/patch-user.dto';
-import { RoleEntity } from 'src/common/entities/roles.entity';
+import { RolesService } from 'src/roles/roles.service';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(UserEntity) private usersRepository: Repository<UserEntity>,
-    @InjectRepository(RoleEntity) private roleRepository: Repository<RoleEntity>,
-    
+    private roleService: RolesService,
   ) { }
 
   // El createUser está implementado únicamente en el register
@@ -66,10 +65,7 @@ export class UsersService {
     }
 
     if (updateUserDto.role) {
-      const roleEntity = await this.roleRepository.findOne({ where: { id: updateUserDto.role} });
-      if (!roleEntity) {
-        throw new NotFoundException("Role Not Found");
-      }
+      const roleEntity = await this.roleService.findRole(updateUserDto.role);
       user.roles = roleEntity;
     }
 

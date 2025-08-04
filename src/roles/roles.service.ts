@@ -5,11 +5,13 @@ import { Repository } from 'typeorm';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/patch-role.dto';
 import { PermissionEntity } from 'src/common/entities/permissions.entity';
+import { PermissionsService } from 'src/permissions/permissions.service';
 
 @Injectable()
 export class RolesService {
-    constructor(@InjectRepository(RoleEntity) private rolesRepository: Repository<RoleEntity>,
-        @InjectRepository(PermissionEntity) private permissionsRepository: Repository<PermissionEntity>
+    constructor(
+        @InjectRepository(RoleEntity) private rolesRepository: Repository<RoleEntity>,
+        private permissionsService: PermissionsService,
     ) { }
 
     async createRole(createRoleDto: CreateRoleDto) {
@@ -19,7 +21,10 @@ export class RolesService {
 
         // Buscamos los permisos usando los IDs enviados.
         if (createRoleDto.permissionIds && createRoleDto.permissionIds.length > 0) {
-            role.permissions = await this.permissionsRepository.findByIds(createRoleDto.permissionIds);
+            for (const permissionId of createRoleDto.permissionIds) {
+                const permission = await this.permissionsService.findPermission(permissionId);
+                role.permissions.push(permission);
+            }
         }
 
         // Guardamos el rol.
@@ -58,10 +63,8 @@ export class RolesService {
         if (updateRoleDto.permissionIds && updateRoleDto.permissionIds.length > 0) {
             const permissionsEntities: PermissionEntity[] = [];
             for (const id of updateRoleDto.permissionIds) {
-                const permissionEntity = await this.permissionsRepository.findOne({ where: { id } });
-                if (permissionEntity) {
-                    permissionsEntities.push(permissionEntity);
-                }
+                const permissionEntity = await this.permissionsService.findPermission(id);
+                permissionsEntities.push(permissionEntity);
             }
             role.permissions = permissionsEntities;
         }
