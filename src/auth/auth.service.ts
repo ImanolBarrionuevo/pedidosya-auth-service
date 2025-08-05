@@ -8,6 +8,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserEntity } from 'src/common/entities/users.entity';
 import { RoleEntity } from 'src/common/entities/roles.entity';
+import { RolesService } from 'src/roles/roles.service';
 
 @Injectable()
 export class AuthService {
@@ -18,8 +19,8 @@ export class AuthService {
     private readonly usersService: UsersService,
     // Inyecta JwtService para generar y validar tokens
     private readonly jwtService: JwtService,
-    // Repositorio de RoleEntity para operaciones CRUD en roles
-    @InjectRepository(RoleEntity) private readonly roleRepository: Repository<RoleEntity>
+    // Inyecta RolesService para comprobaciones del rol
+    private readonly rolesService: RolesService
   ) { }
 
   async register(userObjectRegister: RegisterAuthDto) {
@@ -30,10 +31,7 @@ export class AuthService {
     }
 
     // Buscamos el role por su id (id=1)
-    const roleFound = await this.roleRepository.findOneBy({ id: userObjectRegister.role });
-    if (!roleFound) {
-      throw new NotFoundException("El rol no existe");
-    }
+    const roleFound = await this.rolesService.findRole(userObjectRegister.role);
 
     // Obtenemos los datos del usuario a registrar
     const { email, password, name } = userObjectRegister; //La password esta en texto plano (12345)
@@ -89,7 +87,6 @@ export class AuthService {
     // Obtenemos permisos del usuario
     const user = await this.usersService.findOneByEmail(payload.email);
     const userPerms: string[] = user.roles.permissions.map(p => p.code);
-    //const userPerms: string[] = (payload.permissions || []).map(p => p.code);
 
     // Verificamos que el usuario cuente con los permisos necesarios, devolviendo un booleano
     const hasAllPermissions = permissions.every(p => userPerms.includes(p));
