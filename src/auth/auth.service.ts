@@ -52,11 +52,7 @@ export class AuthService {
         const { email, password } = userObjectLogin; // Obtiene los datos del usuario logueado
 
         // Busca al usuario por su email junto a su rol y permisos asociaciados
-        const findUser = await this.userRepository.findOne({
-            where: { email },
-            relations: ['roles', 'roles.permissions']
-        })
-        if (!findUser) throw new HttpException('USER_NOT_FOUND', 404)
+        const findUser = await this.usersService.findOneByEmail(email);
 
         // Compara la contraseña ingresada con la contraseña hasheada del usuario
         const checkPassword = await compare(password, findUser.password)
