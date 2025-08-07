@@ -1,3 +1,10 @@
+/**
+ * Controlador de roles para la API.
+ * Expone endpoints para crear, leer, actualizar y eliminar roles.
+ * Cada endpoint verifica los permisos necesarios mediante el decorador personalizado.
+ * Además, se protege con el middleware de autenticación.
+ */
+
 import { Body, Controller, Get, Param, Post, Put, Patch, Delete } from '@nestjs/common';
 import { RolesService } from './roles.service';
 import { CreateRoleDto } from './dto/create-role.dto';
@@ -9,48 +16,48 @@ import { AuthGuard } from 'src/middlewares/auth.middleware';
 
 
 @Controller('roles')
-@UseGuards(AuthGuard) 
+@UseGuards(AuthGuard)
 export class RolesController {
 
-    // Inyectamos el servicio de roles
+    // Inyecta el servicio de roles
     constructor(private rolesService: RolesService) { }
 
-    // Creamos un rol
+    // Crea un nuevo rol // Permiso: CREATE_ROLE
     @Post()
     @PermissionsDecorator(Permissions.CreateRole)
     postRole(@Body() createRoleDto: CreateRoleDto) {
         return this.rolesService.createRole(createRoleDto)
     }
 
-    // Obtenemos todos los roles
+    // Obtiene todos los roles // Permiso: READ_ROLE
     @Get()
     @PermissionsDecorator(Permissions.ReadRole)
     getRoles() {
         return this.rolesService.findAllRole()
     }
-    
-    // Obtenemos un rol especifico
+
+    // Obtiene un rol específico por ID // Permiso: READ_ROLE
     @Get(':id')
     @PermissionsDecorator(Permissions.ReadRole)
     getRole(@Param('id') idRole: number) {
         return this.rolesService.findRole(idRole)
     }
 
-    // Actualizamos un rol
+    // Actualiza completamente un rol por ID // Permiso: MODIFY_ROLE
     @Put(':id')
     @PermissionsDecorator(Permissions.ModifyRole)
     putRole(@Param('id') idRole: number, @Body() updateRole: CreateRoleDto) {
         return this.rolesService.updateRole(idRole, updateRole)
     }
 
-    // Actualizamos parcialmente un rol
+    // Actualiza parcialmente un rol por ID // Permiso: MODIFY_ROLE
     @Patch(':id')
     @PermissionsDecorator(Permissions.ModifyRole)
     patchRole(@Param('id') idRole: number, @Body() partialUpdateRole: UpdateRoleDto) {
         return this.rolesService.partialUpdateRole(idRole, partialUpdateRole)
     }
 
-    // Eliminamos un rol por id
+    // Elimina un rol por ID // Permiso: DELETE_ROLE
     @Delete(':id')
     @PermissionsDecorator(Permissions.DeleteRole)
     deleteRole(@Param('id') idRole: number) {
