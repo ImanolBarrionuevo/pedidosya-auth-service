@@ -31,22 +31,19 @@ export class PermissionsService {
     }
 
     async updatePermission(id: number, updatePermission: CreatePermissionDto) {
-        await this.permissionsRepository.update(id, updatePermission)
-        return this.findPermission(id)
+        // Verificamos que el permiso exista
+        const permission = await this.findPermission(id);
+        Object.assign(permission, updatePermission);
+        await this.permissionsRepository.save(permission);
+        return permission;
     }
 
     async partialUpdatePermission(id: number, updatePermission: UpdatePermissionDto) {
-        const permission = await this.permissionsRepository.findOne({ where: { id: id } })
-        if (!permission) {
-            throw new NotFoundException("Permission Not Found");
-        }
-
-        Object.keys(updatePermission).forEach(column => {
-            permission[column] = updatePermission[column];
-        })
-
-        await this.permissionsRepository.update(id, permission)
-        return permission
+        // Verificamos que el permiso exista
+        const permission = await this.findPermission(id);
+        Object.assign(permission, updatePermission);
+        await this.permissionsRepository.save(permission);
+        return permission;
     }
 
     async deletePermission(id: number) {

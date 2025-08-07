@@ -30,7 +30,7 @@ export class RolesService {
 
         // Guardamos el rol.
         await this.rolesRepository.save(role);
-        return await this.findRole(role.id)
+        return role;
     }
 
     // Buscamos todos los roles
@@ -54,19 +54,35 @@ export class RolesService {
 
     // Actualizamos un rol
     async updateRole(id: number, updateRole: CreateRoleDto) {
-        await this.rolesRepository.update(id, updateRole)
-        return this.findRole(id)
+        // Verificamos que el rol exista
+        const role = await this.findRole(id);
+        // Actualizamos las propiedades de un objeto a un objeto destino.
+        Object.assign(role, updateRole);
+
+        // Creamos un arreglo donde acumularemos las entidades PermissionEntity
+        const permissionsEntities: PermissionEntity[] = [];
+        // Recorremos cada id que vino en el DTO
+        for (const id of updateRole.permissionIds) {
+            const permissionEntity = await this.permissionsService.findPermission(id);
+            permissionsEntities.push(permissionEntity);
+        }
+        // Asignamos al rol la lista completa de entidades encontradas
+        role.permissions = permissionsEntities;
+        
+        // Guarda la entidad completa para que se actualicen tanto columnas simples como relaciones.
+        await this.rolesRepository.save(role);
+        return role;
     }
 
     // Actualizamos parcialmente un rol 
     async partialUpdateRole(id: number, updateRoleDto: UpdateRoleDto) {
 
         // Verificamos que haya un rol con el id que recibimos
-        const role = await this.rolesRepository.findOne({ where: { id } });
-        if (!role) {
-            throw new NotFoundException("Role Not Found");
-        }
-        
+        const role = await this.findRole(id);
+
+        // Actualizamos las propiedades de un objeto a un objeto destino.
+        Object.assign(role, updateRoleDto);
+
         // Si el DTO trae un arreglo de IDs de permisos y no está vacío
         if (updateRoleDto.permissionIds && updateRoleDto.permissionIds.length > 0) {
             // Creamos un arreglo donde acumularemos las entidades PermissionEntity
@@ -79,9 +95,6 @@ export class RolesService {
             // Asignamos al rol la lista completa de entidades encontradas
             role.permissions = permissionsEntities;
         }
-
-        // Actualizamos las propiedades de un objeto a un objeto destino.
-        Object.assign(role, updateRoleDto);
 
         // Guarda la entidad completa para que se actualicen tanto columnas simples como relaciones.
         await this.rolesRepository.save(role);
