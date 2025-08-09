@@ -1,0 +1,41 @@
+@startuml auth-service-der
+
+hide circle
+
+entity Users {
+    id **PK** : SERIAL
+    ---
+    name : TEXT
+    ---
+    email : TEXT
+    ---
+    password : TEXT
+    ---
+    roleId **FK** : INTEGER
+}
+
+entity Roles {
+    id **PK** : SERIAL
+    ---
+    name : TEXT
+    ---
+    permissionId **FK** : INTEGER
+}
+
+entity Permissions {
+    id **PK** : SERIAL
+    ---
+    code : TEXT
+}
+
+entity RolePermissions {
+    roleId **FK** : INTEGER
+    ---
+    permissionId **FK** : INTEGER
+}
+
+Users::roleId }|-right--||Roles::id
+Roles::id ||-down-o{ RolePermissions::roleId
+Permissions::id ||-right--o{ RolePermissions::permissionId
+
+@enduml
