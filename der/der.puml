@@ -7,6 +7,8 @@ entity Users {
     ---
     name : TEXT
     ---
+    surname : TEXT
+    ---
     email : TEXT
     ---
     password : TEXT
